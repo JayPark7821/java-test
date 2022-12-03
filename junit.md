@@ -47,5 +47,16 @@ Vintage : JUnit 4와 3을 지원하는 TestEngine 구현체
   * 모든 확인 구문 확인 -> assertAll(excutables)
   * 예외 발생 확인 -> assertThrows(expectedType, executable)
   * 특정 시간 안에 실행이 완료되는지 확인(assertTimeout(duration, executable))
-  
-  
+
+### 5. JUnit 5: 조건에 따라 테스트 실행하기
+* 특정한 조건을 만족하는 경우에 테스트를 실행하는 방법
+* org.junit.jupiter.api.Assumptions.*
+  * assumeTrue(조건)
+  * assumingThat(조건, 테스트)
+* @Enabled_____와 @Disabled_____
+  * OnOS
+  * OnJre
+  * IfSystemProperty
+  * IfEnvrionmentVariable
+  * If
+

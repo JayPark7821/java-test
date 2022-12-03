@@ -1,6 +1,7 @@
 package me.jaypark.javatest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 import java.time.Duration;
 
@@ -8,10 +9,17 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnJre;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.JRE;
+import org.junit.jupiter.api.condition.OS;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
@@ -49,6 +57,7 @@ class StudyTest {
 	}
 
 	@Test
+	@DisabledOnOs(OS.WINDOWS)
 	void create_new_study2() throws Exception{
 
 		assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
@@ -60,6 +69,26 @@ class StudyTest {
 		System.out.println("create1");
 	}
 
+	@Test
+	@EnabledOnOs({OS.MAC, OS.LINUX})
+	@DisabledOnJre(JRE.JAVA_8)
+	@EnabledIfEnvironmentVariable(named = "TEST_NEW", matches = "LOCAL")
+	void env_variable_test() {
+		String test_env = System.getenv("TEST_ENV");
+		System.out.println("test_env = " + test_env);
+		assumeTrue("LOCAL".equalsIgnoreCase(test_env));
+
+		assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
+			System.out.println("test_env = " + test_env);
+			Study study = new Study(10);
+			assertNotNull(study);
+		});
+		assumingThat("DEV".equalsIgnoreCase(test_env), () -> {
+			System.out.println("test_env = " + test_env);
+			Study study = new Study(10);
+			assertNotNull(study);
+		});
+	}
 	// 모든 테스트를 실행하기 전에 딱 한번만 실행
 	// 반드시 static void로 메소드를 작성해야함. private 불가.
 	@BeforeAll
