@@ -31,10 +31,21 @@ Vintage : JUnit 4와 3을 지원하는 TestEngine 구현체
 * @AfterEach
   * 각각의 테스트를 실행한 이후에 매번 실행됨
   
-### 2. JUnit 5: 테스트 이름 표기하기
+### 3. JUnit 5: 테스트 이름 표기하기
 * @DisplayNameGeneration
   * Method와 Class 레퍼런스를 사용해서 테스트 이름을 표기하는 방법 설정
   * 기본 구현체로 ReplaceUnderscores 제공
 * @DisplayName
   * 어떤 테스트인지 테스트 이름을 보다 쉽게 표현할 수 있는 방법을 제공하는 애노테이션.
   * @DisplayNameGeneration 보다 우선 순위가 높다.
+
+### 4. JUnit 5: Assertions
+* org.junit.jupiter.api.Assertions.*
+  * 실제 값이 기대한 값과 같은지 확인 -> assertEquals(expected,actual)
+  * 값이 null이 아닌지 확인 -> assertNotNull(actual)
+  * 다음 조건이 참(true)인지 확인 -> assertTrue(boolean)
+  * 모든 확인 구문 확인 -> assertAll(excutables)
+  * 예외 발생 확인 -> assertThrows(expectedType, executable)
+  * 특정 시간 안에 실행이 완료되는지 확인(assertTimeout(duration, executable))
+  
+  

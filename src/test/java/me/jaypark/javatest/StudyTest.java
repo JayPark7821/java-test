@@ -2,6 +2,8 @@ package me.jaypark.javatest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,16 +19,44 @@ class StudyTest {
 	@Test
 	@DisplayName("스터디 만들기 \uD83D\uDE31")
 	void create() throws Exception{
-		Study study = new Study();
-		assertNotNull(study);
+		Study study = new Study( 10);
+		assertAll(
+			() -> assertNotNull(study),
+			() -> assertEquals(StudyStatus.DRAFT, study.getStatus(), ()->"스터디를 처음 만들면 상태값이 DRAFT여야 한다."),
+			() -> assertTrue(study.getLimit() > 0 , "스터디 최대 참석 가능인원은 0명 이상")
+		);
 		System.out.println("create");
 	}
 
 
 	@Test
 	void create_new_study() throws Exception{
-		Study study = new Study();
-		assertNotNull(study);
+
+		IllegalArgumentException exception =
+			assertThrows(IllegalArgumentException.class, () -> new Study(-19));
+		assertEquals("limit은 0보다 커야 한다.", exception.getMessage());
+
+		System.out.println("create1");
+	}
+
+	@Test
+	void create_new_study1() throws Exception{
+
+		assertTimeout(Duration.ofMillis(100), () -> {
+			new Study(10);
+			Thread.sleep(300);
+		});
+	}
+
+	@Test
+	void create_new_study2() throws Exception{
+
+		assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
+			new Study(10);
+			Thread.sleep(300);
+		});
+
+
 		System.out.println("create1");
 	}
 
