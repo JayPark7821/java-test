@@ -92,8 +92,9 @@ class StudyTest {
 	}
 
 
-	@Test
-	@Tag("fast")
+	// @Test
+	// @Tag("fast")
+	@FastTest
 	void tag2() throws Exception{
 		Study study = new Study( 10);
 		assertNotNull(study);

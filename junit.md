@@ -68,3 +68,16 @@ Vintage : JUnit 4와 3을 지원하는 TestEngine 구현체
 * 인텔리j에서 특정 태그로 테스트 필터링 하는 방법
 
 ![image](https://user-images.githubusercontent.com/60100532/205474275-847f7c05-2307-4c23-9491-87f2a2eab41f.png)
+
+
+### 7. JUnit 5: 커스텀 태그
+* 어노테이션을 좋바하여 커스텀 태그를 만들 수 있다.
+```java
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@Tag("fast")
+@Test
+public @interface FastTest {
+}
+
+```
