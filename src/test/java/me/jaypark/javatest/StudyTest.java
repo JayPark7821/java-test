@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnJre;
 import org.junit.jupiter.api.condition.DisabledOnOs;
@@ -89,6 +90,24 @@ class StudyTest {
 			assertNotNull(study);
 		});
 	}
+
+
+	@Test
+	@Tag("fast")
+	void tag2() throws Exception{
+		Study study = new Study( 10);
+		assertNotNull(study);
+	}
+
+
+	@Test
+	@Tag("slow")
+	void tag1() throws Exception{
+		Study study = new Study( 10);
+		assertNotNull(study);
+	}
+
+
 	// 모든 테스트를 실행하기 전에 딱 한번만 실행
 	// 반드시 static void로 메소드를 작성해야함. private 불가.
 	@BeforeAll

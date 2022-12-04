@@ -60,3 +60,11 @@ Vintage : JUnit 4와 3을 지원하는 TestEngine 구현체
   * IfEnvrionmentVariable
   * If
 
+### 6. JUnit 5: 태깅과 필터링
+* 테스트 그룹을 만들고 원하는 테스트 그룹만 테스트를 실행할 수 있는 기능.
+* @Tag
+  * 테스트 메소드에 태그를 추가할 수 있다.
+  * 하나의 테스트 메소드에 여러 태그를 사용할 수 있다.
+* 인텔리j에서 특정 태그로 테스트 필터링 하는 방법
+
+![image](https://user-images.githubusercontent.com/60100532/205474275-847f7c05-2307-4c23-9491-87f2a2eab41f.png)
