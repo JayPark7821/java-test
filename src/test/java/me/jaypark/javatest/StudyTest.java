@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnJre;
@@ -21,6 +23,8 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class StudyTest {
@@ -107,6 +111,24 @@ class StudyTest {
 		Study study = new Study( 10);
 		assertNotNull(study);
 	}
+
+
+	@DisplayName("스터디 만들기")
+	@RepeatedTest(value = 10, name="{displayName}, {currentRepetition}/{totalRepetitions}")
+	void repeatTest(RepetitionInfo info) throws Exception{
+		System.out.println("repeat Test");
+		System.out.println("info.getCurrentRepetition() = " + info.getCurrentRepetition());
+		System.out.println("info.getTotalRepetitions() = " + info.getTotalRepetitions());
+	}
+
+	@DisplayName("스터디 만들기")
+	@ParameterizedTest(name="{index}, {displayName} message = {0}")
+	@ValueSource(strings = {"날씨가", "많이", "추워지고", "있네요"})
+	void parameterizedTest(String message) {
+		System.out.println(message);
+	}
+
+
 
 
 	// 모든 테스트를 실행하기 전에 딱 한번만 실행
