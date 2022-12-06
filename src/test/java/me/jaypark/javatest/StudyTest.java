@@ -13,10 +13,14 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.DisabledOnJre;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -38,8 +42,11 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StudyTest {
 
+	@Order(2)
 	@Test
 	@DisplayName("스터디 만들기 \uD83D\uDE31")
 	void create() throws Exception{
@@ -53,6 +60,7 @@ class StudyTest {
 	}
 
 
+	@Order(1)
 	@Test
 	void create_new_study() throws Exception{
 
@@ -63,6 +71,7 @@ class StudyTest {
 		System.out.println("create1");
 	}
 
+	@Order(3)
 	@Test
 	void create_new_study1() throws Exception{
 
@@ -72,6 +81,7 @@ class StudyTest {
 		});
 	}
 
+	@Order(4)
 	@Test
 	@DisabledOnOs(OS.WINDOWS)
 	void create_new_study2() throws Exception{
