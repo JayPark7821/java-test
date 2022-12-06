@@ -64,3 +64,27 @@ class StudyServiceTest {
   * 어떤 순서대로 호출했는지
   * 특정 시간 이내에 호출됐는지
   * 특정 시점 이후에 아무 일도 벌어지지 않았는지
+
+### 5. BDD 스타일 Mockito API
+* BDD: 어플리케이션이 어떻게 "행동" 해야 하는지에 대한 공통된 이해를 구성하는 방법으로, TDD에서 창안했다.
+* 행동에 대한 스팩
+  * Title
+  * Narrative
+    * As a / I want / so that
+  * Acceptance criteria
+    * Given / When / Then
+* Mockito는 BddMockito라는 클래스를 통해 BDD스타일의 API를 제공한다.
+
+* When -> Given
+```java
+given(memberService.findById(1L)).willReturn(Optional.of(member));
+given(studyRepository.save(study)).willReturn(study);
+
+```
+
+* Verify -> Then
+```java
+then(memberService).should(times(1)).notify(study);
+then(memberService).shouldHaveNoMoreInteractions();
+
+```
