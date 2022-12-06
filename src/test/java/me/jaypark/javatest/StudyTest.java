@@ -27,7 +27,9 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.JRE;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -44,25 +46,30 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+// @ExtendWith(FindSlowTestExtension.class)
 class StudyTest {
+
+	@RegisterExtension
+	static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
 
 	@Order(2)
 	@Test
 	@DisplayName("스터디 만들기 \uD83D\uDE31")
-	void create() throws Exception{
-		Study study = new Study( 10);
+	void create() throws Exception {
+		Study study = new Study(10);
+		Thread.sleep(1005L);
+
 		assertAll(
 			() -> assertNotNull(study),
-			() -> assertEquals(StudyStatus.DRAFT, study.getStatus(), ()->"스터디를 처음 만들면 상태값이 DRAFT여야 한다."),
-			() -> assertTrue(study.getLimit() > 0 , "스터디 최대 참석 가능인원은 0명 이상")
+			() -> assertEquals(StudyStatus.DRAFT, study.getStatus(), () -> "스터디를 처음 만들면 상태값이 DRAFT여야 한다."),
+			() -> assertTrue(study.getLimit() > 0, "스터디 최대 참석 가능인원은 0명 이상")
 		);
 		System.out.println("create");
 	}
 
-
 	@Order(1)
 	@Test
-	void create_new_study() throws Exception{
+	void create_new_study() throws Exception {
 
 		IllegalArgumentException exception =
 			assertThrows(IllegalArgumentException.class, () -> new Study(-19));
@@ -73,7 +80,7 @@ class StudyTest {
 
 	@Order(3)
 	@Test
-	void create_new_study1() throws Exception{
+	void create_new_study1() throws Exception {
 
 		assertTimeout(Duration.ofMillis(100), () -> {
 			new Study(10);
@@ -84,13 +91,12 @@ class StudyTest {
 	@Order(4)
 	@Test
 	@DisabledOnOs(OS.WINDOWS)
-	void create_new_study2() throws Exception{
+	void create_new_study2() throws Exception {
 
 		assertTimeoutPreemptively(Duration.ofMillis(100), () -> {
 			new Study(10);
 			Thread.sleep(300);
 		});
-
 
 		System.out.println("create1");
 	}
@@ -116,34 +122,31 @@ class StudyTest {
 		});
 	}
 
-
 	// @Test
 	// @Tag("fast")
 	@FastTest
-	void tag2() throws Exception{
-		Study study = new Study( 10);
+	void tag2() throws Exception {
+		Study study = new Study(10);
 		assertNotNull(study);
 	}
-
 
 	@Test
 	@Tag("slow")
-	void tag1() throws Exception{
-		Study study = new Study( 10);
+	void tag1() throws Exception {
+		Study study = new Study(10);
 		assertNotNull(study);
 	}
 
-
 	@DisplayName("스터디 만들기")
-	@RepeatedTest(value = 10, name="{displayName}, {currentRepetition}/{totalRepetitions}")
-	void repeatTest(RepetitionInfo info) throws Exception{
+	@RepeatedTest(value = 10, name = "{displayName}, {currentRepetition}/{totalRepetitions}")
+	void repeatTest(RepetitionInfo info) throws Exception {
 		System.out.println("repeat Test");
 		System.out.println("info.getCurrentRepetition() = " + info.getCurrentRepetition());
 		System.out.println("info.getTotalRepetitions() = " + info.getTotalRepetitions());
 	}
 
 	@DisplayName("스터디 만들기")
-	@ParameterizedTest(name="{index}, {displayName} message = {0}")
+	@ParameterizedTest(name = "{index}, {displayName} message = {0}")
 	@ValueSource(strings = {"날씨가", "많이", "추워지고", "있네요"})
 	void parameterizedTest(String message) {
 		System.out.println(message);
@@ -152,8 +155,8 @@ class StudyTest {
 	@DisplayName("스터디 만들기")
 	@EmptySource
 	@NullSource
-	@ParameterizedTest(name="{index}, {displayName} message = {0}")
-	@ValueSource(ints = {10,20,30})
+	@ParameterizedTest(name = "{index}, {displayName} message = {0}")
+	@ValueSource(ints = {10, 20, 30})
 	void parameterizedTest2(@ConvertWith(StudyConverter.class) Study study) {
 		System.out.println(study.getLimit());
 	}
@@ -169,9 +172,9 @@ class StudyTest {
 	@DisplayName("스터디 만들기")
 	@EmptySource
 	@NullSource
-	@ParameterizedTest(name="{index}, {displayName} message = {0}")
-	@CsvSource({"10, '자바 스터디'","20, 스프링"})
-	void parameterizedTest3 (Integer limit, String name) {
+	@ParameterizedTest(name = "{index}, {displayName} message = {0}")
+	@CsvSource({"10, '자바 스터디'", "20, 스프링"})
+	void parameterizedTest3(Integer limit, String name) {
 		Study study = new Study(limit, name);
 		System.out.println("study = " + study);
 	}
@@ -203,11 +206,6 @@ class StudyTest {
 			return new Study(accessor.getInteger(0), accessor.getString(1));
 		}
 	}
-
-
-
-
-
 
 	// 모든 테스트를 실행하기 전에 딱 한번만 실행
 	// 반드시 static void로 메소드를 작성해야함. private 불가.
