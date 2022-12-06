@@ -225,9 +225,58 @@ class StudyServiceTest {
 
 
 	@Test
-	void createStudyService2 (@Mock MemberService memberService,
+	void createNewStudy(@Mock MemberService memberService,
 		 					  @Mock StudyRepository studyRepository) throws Exception {
+
 		StudyService studyService = new StudyService(memberService, studyRepository);
+
+		Member member = new Member();
+		member.setId(1L);
+		member.setEmail("test@mail.com");
+
+		when(memberService.findById(any())).thenReturn(Optional.of(member));
+		Study java = new Study(10, "java");
+		studyService.createNewStudy(1L, java);
+
+		assertEquals("test@mail.com", memberService.findById(1L).get().getEmail());
+		assertEquals("test@mail.com", memberService.findById(2L).get().getEmail());
+
+		// when(memberService.findById(1L)).thenThrow(new RuntimeException());
+		doThrow(new IllegalArgumentException()).when(memberService).validate(1L);
+
+		assertThrows(IllegalArgumentException.class, () -> {
+			memberService.validate(1L);
+
+		});
+
 		assertNotNull(studyService);
+
+	}
+
+
+	@Test
+	void createNewStudy2(@Mock MemberService memberService,
+		@Mock StudyRepository studyRepository) throws Exception {
+
+		StudyService studyService = new StudyService(memberService, studyRepository);
+
+		Member member = new Member();
+		member.setId(1L);
+		member.setEmail("test@mail.com");
+
+		when(memberService.findById(any()))
+			.thenReturn(Optional.of(member))
+			.thenThrow(new RuntimeException())
+			.thenReturn(Optional.empty());
+
+		Optional<Member> byId = memberService.findById(1L);
+		assertEquals("test@mail.com", byId.get().getEmail());
+
+		assertThrows(RuntimeException.class, ()->{
+			memberService.findById(2L);
+		});
+
+		assertEquals(Optional.empty(),  memberService.findById(3L));
+
 	}
 }
