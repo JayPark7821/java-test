@@ -10,3 +10,39 @@
   * Mock을 만드는 방법
   * Mock이 어떻게 동작해야 하는지 관리하는 방법
   * Mock의 행동을 검증하는 방법
+
+### 3. Mock 객체 만들기
+* Mockito.mock() 메소드로 만드는 방법
+```java
+MemberService memberService = mock(MemberService.class);
+StudyRepository studyRepository = mock(StudyRepository.class);
+```
+
+* @Mock 어노테이션으로 만드는 방법
+  * JUnit 5 extension으로 MockitoExtension을 사용해야 한다.
+  * 필드
+  * 메소드 매개변수
+  
+```java
+@ExtendWith(MockitoExtension.class)
+class StudyServiceTest {
+
+  @Mock
+  MemberService memberService;
+
+  @Mock
+  StudyRepository studyRepository;
+}
+```  
+```java
+@ExtendWith(MockitoExtension.class)
+class StudyServiceTest {
+
+  @Test
+  void createStudyService(@Mock MemberService memberService,
+          @Mock StudyRepository studyRepository) {
+    StudyService studyService = new StudyService(memberService, studyRepository);
+    assertNotNull(studyService);
+  }
+}
+```

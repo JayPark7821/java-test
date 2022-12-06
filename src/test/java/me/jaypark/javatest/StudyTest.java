@@ -43,6 +43,9 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import me.jaypark.javatest.domain.Study;
+import me.jaypark.javatest.domain.StudyStatus;
+
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -62,7 +65,7 @@ class StudyTest {
 		assertAll(
 			() -> assertNotNull(study),
 			() -> assertEquals(StudyStatus.DRAFT, study.getStatus(), () -> "스터디를 처음 만들면 상태값이 DRAFT여야 한다."),
-			() -> assertTrue(study.getLimit() > 0, "스터디 최대 참석 가능인원은 0명 이상")
+			() -> assertTrue(study.getLimitCount() > 0, "스터디 최대 참석 가능인원은 0명 이상")
 		);
 		System.out.println("create");
 	}
@@ -158,7 +161,7 @@ class StudyTest {
 	@ParameterizedTest(name = "{index}, {displayName} message = {0}")
 	@ValueSource(ints = {10, 20, 30})
 	void parameterizedTest2(@ConvertWith(StudyConverter.class) Study study) {
-		System.out.println(study.getLimit());
+		System.out.println(study.getLimitCount());
 	}
 
 	static class StudyConverter extends SimpleArgumentConverter {
